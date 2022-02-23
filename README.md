@@ -228,3 +228,41 @@ Return:
     }
 ]
 ````
+
+
+
+#### **flood_data(network, start_date, end_date="",sensor="")** 
+ Flood data route makes an API call for data between the start date and end date 
+ and optionally a sensor.
+
+Parameters:
+
+```
+:param network (required):     (string) - sensor network only pima and maricopa 
+:param start_date (required):  (string) - format "YYYY-MM-DD"
+:param end_date (optional):    (string) - format "YYYY-MM-DD"
+:param sensor (optional):      (string) - specific sensor ID 
+```
+
+Example:
+
+```
+# entire network request
+flood_data("pima_fcd","2022-02-15")
+# single sensor request
+flood_data("maricopa_fcd","2022-01-18", "2022-02-01", "773")
+```
+
+Return:
+``` 
+ [
+      {
+        'sensor_name': '6383',
+        'reading_date': '2022-02-15T22: 20: 56.000Z',
+        'feet': 2.4,
+        'cfs': 0,
+        'anomaly_checksum': '',
+        'lat': 31.839169,
+        'lon': -111.404335
+    } 
+]
