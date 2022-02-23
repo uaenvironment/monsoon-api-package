@@ -7,4 +7,4 @@ URL = "https://api.air.arizona.edu"
 
 # Input issued username and key information below.
 USERNAME = ""
-KEY = ""
+KEY = ""  

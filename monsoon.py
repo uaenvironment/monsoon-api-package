@@ -55,6 +55,22 @@ def sensor_readings(network, start_date, end_date="", sensor=""):
     # send request
     return get_data(query_string)
 
+def flood_data(network, start_date, end_date="", sensor=""):
+    """
+    Flood data route makes an API call for data between the start date and end date 
+    and optionally a sensor.
+    :param network (required):     (string) - sensor network only pima and maricopa 
+    :param start_date (required):  (string) - format "YYYY-MM-DD"
+    :param end_date (optional):    (string) - format "YYYY-MM-DD"
+    :param sensor (optional):      (string) - specific sensor ID 
+    """
+    validate_date_input(start_date, end_date)
+
+    query_string = mon_conf.URL + \
+        "/flood?network={}&startDate={}&endDate{}&sensor={}".format(
+            network, start_date, end_date, sensor)
+
+    return get_data(query_string)
 
 def monsoon_data(network, start_year, end_year="", sensor=""):
     """
