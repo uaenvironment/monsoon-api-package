@@ -40,7 +40,7 @@ def sensor_readings(network, start_date, end_date="", sensor=""):
     :param network (required):    (string) - Sensor network to gather data from.
     :param start_date (required): (string) - Specific date or beginning date range to gather data from in "YYYY-MM-DD" format.
     :param end_date:              (string) - End date of a the date range being requested in "YYYY-MM-DD" format.
-    :param sensor:                (int)    - Specific sensor to retrieve data for. If not provided, all sensor reading will be returned.
+    :param sensor:                (string) - Specific sensor to retrieve data for. If not provided, all sensor reading will be returned.
     :return JSON:                          - Returns unprocessed data for a network or network sensor for a given date(s).
     """
 
@@ -72,7 +72,8 @@ def flood_data(network, start_date, end_date="", sensor=""):
 
     return get_data(query_string)
 
-def monsoon_data(network, start_year, end_year="", sensor=""):
+
+def monsoon_data(network, start_year, end_year="", sensor="", raw=""): 
     """
     Monsoon data route which makes an API call for data between June 15th to
     September 30th for a given year or set of years (inclusive). Also allows the
@@ -81,7 +82,10 @@ def monsoon_data(network, start_year, end_year="", sensor=""):
     :param network (required):    (string) - Sensor network to gather data from.
     :param start_year (required): (string) - Starting year in "YYYY" format.
     :param end_year:              (string) - End year (inclusive) of monsoon data date range in "YYYY" format.
-    :param sensor:                (int)    - Specific sensor id monsoon data is being requested.
+    :param sensor:                (string) - Specific sensor id monsoon data is being requested.
+    :param raw:                   (bool)   - Default is False. If True the data will run through our delta calculation to return
+                                             totals for all sensors during the monsoon period. When used raw 
+                                             adds datetime to return.
     :return JSON:                          - Returns monsoon data for given year(s).
     """
 
@@ -90,9 +94,8 @@ def monsoon_data(network, start_year, end_year="", sensor=""):
 
    # construct API request
     query_string = mon_conf.URL + \
-        "/monsoon?network={}&startYear={}&endYear{}&sensor={}".format(
-            network, start_year, end_year, sensor)
-
+        "/monsoon?network={}&startYear={}&endYear{}&sensor={}&raw={}".format(
+            network, start_year, end_year, sensor, raw)
     # send request
     return get_data(query_string)
 
@@ -102,7 +105,7 @@ def sensor_metadata(network, sensor=""):
     Retrieves sensor metadata such as name, location, and sensor type for a specific sensor id or entire network.
 
     :param network (required): (string) - Network to retrieve sensor information from as string.
-    :param sensor:             (int)    - Retrieve specific sensor. If not provided all sensors within a network will be returned.
+    :param sensor:             (string) - Retrieve specific sensor. If not provided all sensors within a network will be returned.
     :return JSON:                       - Returns metadata for given sensor or all sensors in a network.
     """
 

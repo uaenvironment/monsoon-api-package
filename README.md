@@ -114,7 +114,7 @@ Parameters:
 network (required):    (string) - Sensor network to gather data from.
 start_date (required): (string) - Specific date or beginning date range to gather data from in "YYYY-MM-DD" format.
 end_date:              (string) - End date of a the date range being requested in "YYYY-MM-DD" format.
-sensor:                (int)    - Specific sensor to retrieve data for. If not provided, all sensor reading will be returned.
+sensor:                (string)    - Specific sensor to retrieve data for. If not provided, all sensor reading will be returned.
 ````
 
 Example:
@@ -149,49 +149,123 @@ Return:
 <br />
 
 #### **monsoon_data**(network, start_year, end_year="", sensor="")
-This function returns data for a given network for an entire monsoon season within a given year(s). Seasons begin June 15th and end September 30th. If an end_year is provided it is treated as inclusive in the data return. Data can also be returned for an entire network or a specific sensor within the network being queried.
+This function returns data for a given network for an entire monsoon season within a given year(s). Seasons begin June 15th and end September 30th. If an end_year is provided it is treated as inclusive in the data return. Data can also be returned for an entire network or a specific sensor within the network being queried. There is also a raw parameter which by default is False, but if set to True the data will be run through delta calculations and in return user will be given totals for all of the sensors during the monsoon period. Setting raw to True will also provide the datetime.
 
 Parameters:
 ````
 network (required):    (string) - Sensor network to gather data from.
 start_year (required): (string) - Starting year in "YYYY" format.
 end_year:              (string) - End year (inclusive) of monsoon data date range in "YYYY" format.
-sensor:                (int)    - Specific sensor name monsoon data is being requested for.
+sensor:                (string) - Specific sensor name monsoon data is being requested for.
+raw:                   (bool)   - Default is False. If True the data will run through our delta 
+                                  calculation to return totals for all sensors during the
+                                  monsoon period. Setting raw as True will also provide 
+                                  datetime. 
 ````
 Example:
 ````python
 # request for sensor name 1030 precip data from 2019 and 2020 monsoon seasons
-monsoon_data("pima_fcd", "2019", "2020", 1030)
+monsoon_data("pima_fcd", "2019", "2020", 1030, True) 
+````
+Return:
+````json
+ {
+        "sensor_name": "1030",
+        "reading_value": 6.73,
+        "lat": 32.532799,
+        "lon": -110.756248,
+        "date": "2019-09-24 11:49:23",
+        "network": "pima_fcd"
+    },
+    {
+        "sensor_name": "1030",
+        "reading_value": 6.77,
+        "lat": 32.532799,
+        "lon": -110.756248,
+        "date": "2019-09-24 11:58:17",
+        "network": "pima_fcd"
+    },
+    {
+        "sensor_name": "1030",
+        "reading_value": 6.81,
+        "lat": 32.532799,
+        "lon": -110.756248,
+        "date": "2019-09-24 12:06:52",
+        "network": "pima_fcd"
+    },
+    {
+        "sensor_name": "1030",
+        "reading_value": 6.85,
+        "lat": 32.532799,
+        "lon": -110.756248,
+        "date": "2019-09-24 12:14:19",
+        "network": "pima_fcd"
+    },
+    ...
+````
 
+Example:
+````python
+# request for sensor name 1030 precip data from 2019 and 2020 monsoon seasons
+monsoon_data("pima_fcd", "2019", "2020", 1030, False) #add true example
+````
+
+Return:
+````json
+[
+    {
+        "sensor_name": "1030",
+        "total_rainfall": 6.93,
+        "lon": -110.756248,
+        "lat": 32.532799,
+        "network": "pima_fcd"
+    }
+]
+````
+
+
+
+Example:
+````python
 # request for all sensor data from 2019 monsoon season
-monsoon_data("pima_fcd", "2019")
+monsoon_data("pima_fcd", "2019") 
 ````
 Return:
 ````json
     {
-        "sensor_name": "1030",
-        "reading_value": 6.89,
-        "datetime": "2019-09-24 12:21:39"
+        "sensor_name": "4310",
+        "total_rainfall": 9.530000000000001,
+        "lon": -110.645172,
+        "lat": 31.993576,
+        "network": "pima_fcd"
     },
     {
-        "sensor_name": "1030",
-        "reading_value": 6.89,
-        "datetime": "2019-09-24 22:19:57"
+        "sensor_name": "4320",
+        "total_rainfall": 6.179999999999999,
+        "lon": -110.638847,
+        "lat": 31.885183,
+        "network": "pima_fcd"
     },
     {
-        "sensor_name": "1030",
-        "reading_value": 6.93,
-        "datetime": "2019-09-25 04:43:28"
+        "sensor_name": "4410",
+        "total_rainfall": 3.8200000000000003,
+        "lon": -110.452812,
+        "lat": 31.905499,
+        "network": "pima_fcd"
     },
     {
-        "sensor_name": "1030",
-        "reading_value": 6.97,
-        "datetime": "2019-09-25 04:54:22"
+        "sensor_name": "6020",
+        "total_rainfall": 2.01,
+        "lon": -111.080132,
+        "lat": 32.337254,
+        "network": "pima_fcd"
     },
     {
-        "sensor_name": "1030",
-        "reading_value": 7.01,
-        "datetime": "2019-09-25 05:15:08"
+        "sensor_name": "6040",
+        "total_rainfall": 4.530000000000001,
+        "lon": -110.993095,
+        "lat": 32.133057,
+        "network": "pima_fcd"
     },
     ...
 ````
@@ -204,7 +278,7 @@ This function retrieves specific sensor metadata for a single sensor name or an 
 Parameters:
 ````
 network (required): (string) - Network to retrieve sensor information from as string.
-sensor:             (int)    - Retrieve specific sensor metadata. If not provided all sensors within a network will be returned.
+sensor:             (string)    - Retrieve specific sensor metadata. If not provided all sensors within a network will be returned.
 ````
 Example:
 ````python
@@ -254,10 +328,10 @@ flood_data("maricopa_fcd","2022-01-18", "2022-02-01", "773")
 ```
 
 Return:
-``` 
+```
  [
       {
-        'sensor_name': '6383',
+        "sensor_name": '6383',
         'reading_date': '2022-02-15T22: 20: 56.000Z',
         'feet': 2.4,
         'cfs': 0,
