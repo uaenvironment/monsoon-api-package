@@ -149,7 +149,7 @@ Return:
 <br />
 
 #### **monsoon_data**(network, start_year, end_year="", sensor="")
-This function returns data for a given network for an entire monsoon season within a given year(s). Seasons begin June 15th and end September 30th. If an end_year is provided it is treated as inclusive in the data return. Data can also be returned for an entire network or a specific sensor within the network being queried. There is also a raw parameter which by default is False, but if set to True the data will be run through delta calculations and in return user will be given totals for all of the sensors during the monsoon period. Setting raw to True will also provide the datetime.
+This function returns data for a given network for an entire monsoon season within a given year(s). Seasons begin June 15th and end September 30th. If an end_year is provided it is treated as inclusive in the data return. Data can also be returned for an entire network or a specific sensor within the network being queried. If you use the raw parameter, which is by default False, the data will be run through the delta calculations. If you set the raw parameter to True the data won't be run through the delta calculation and you will be given the datetime. 
 
 Parameters:
 ````
@@ -207,7 +207,7 @@ Return:
 Example:
 ````python
 # request for sensor name 1030 precip data from 2019 and 2020 monsoon seasons
-monsoon_data("pima_fcd", "2019", "2020", 1030, False) #add true example
+monsoon_data("pima_fcd", "2019", "2020", 1030, False)
 ````
 
 Return:
