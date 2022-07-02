@@ -1,7 +1,6 @@
 import sys
 import requests
 import json
-import mon_conf
 import datetime
 
 """
@@ -58,7 +57,7 @@ class MonsoonAPI:
 
         # construct API request
         query_string = MonsoonAPI.API_BASE_URL + \
-            "/readings?network={}&startDate={}&endDate{}&sensor={}".format(
+            "/readings?network={}&startDate={}&endDate={}&sensor={}".format(
                 network, start_date, end_date, sensor)
 
         # send request
@@ -76,7 +75,7 @@ class MonsoonAPI:
         self.__validate_date_input(start_date, end_date)
 
         query_string = MonsoonAPI.API_BASE_URL + \
-            "/flood?network={}&startDate={}&endDate{}&sensor={}".format(
+            "/flood?network={}&startDate={}&endDate={}&sensor={}".format(
                 network, start_date, end_date, sensor)
 
         return self.__get_data(query_string)

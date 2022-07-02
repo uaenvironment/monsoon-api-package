@@ -1,63 +1,47 @@
 # monsoon-api-package
-## Overview
+## <ins>Overview</ins>
 This package serves as a wrapper to simplify REST API calls to the UArizona Environment monsoon dataset. This is the same dataset that is visually represented in our monsoon plotter found at [monsoon.environment.arizona.edu](monsoon.environment.arizona.edu). The plotter allows a limited export of the data dependent on the date range and sensor network being plotted. This package allows you to incorporate our monsoon dataset into a local codebase for processing. The dataset consist of the following remote sensing precipitation networks along with their programmatic names:
 
 - Pima County FCD - pima_fcd
 - Maricopa County FCD - maricopa_fcd
 - [RainLog.org](rainlog.org) - rainlog
 - MesoWest - mesowest
+- Mohave County FCD - mohave_fcd (data beginning 2021)
 
 Data from the networks above are updated at different frequencies and in some cases multiple times per day or hour. This is variable across networks based on their configuration and if precipitation sensors are experiencing rainfall.
 
 Data collection from additional networks is currently being tested and will be added to the list above when available. The network(s) currently being tested include:
 
-- Mohave County FCD
+- New networks coming soon
 
 <br />
 
-## Getting Started
-This package contains 2 files named mon_conf.py which serves as a configuration file and monsoon.py which is the collection of functions used to query the API for data. 
+## <ins>Getting Started</ins>
+This repository contains 1 file named monsoon.py which is a class containing a collection of methods used to query the API for data. 
 
-### mon_conf.py
-Serves as the main configuration file used for user/organization API authentication. It contains the base URL variable used to build the API query string, and the USERNAME and KEY variables which must be set prior to making an API call. These string values are issued once access has been granted to the dataset.
+<br>
 
-````python
-# API base URL
-URL = "https://api.air.arizona.edu"
+### Creating an instance of monsoon.py
 
-# Input issued username and key information below
-USERNAME = ""
-KEY = ""
-````
-
-After you have configured mon_conf.py wth your issued USERNAME and KEY, you can then import monsoon into your project file along with the JSON package.
+The sample code below is the process to create an instance of the monsoon.py class.
 
 ````python
-import json
 import monsoon
 
-# sample function calls NOTE: missing required parameters
-monsoon.precip_totals(parameters)
-monsoon.sensor_readings(parameters)
-monsoon.monsoon_data(parameters)
-monsoon.sensor_metadata(parameters)
-
-# example of storing API data in python variable
-data = monsoon.sensor_metadata("pima_fcd", 1030)
-
-# TODO: describe the python datatype of the above data variable
-
-# TODO: show how to retrieve specific values within the data
+# pass your issued username and key as parameters to the monsoon.py class constructor
+monsoon_object = monsoon.MonsoonAPI(username, key)
 ````
-<br />
+If incorrect credentials are supplied the class will return the following.
 
-## Requesting Data
+```
+Could not authenticate
+```
 
-### monsoon.py
+</br>
 
-Serves as the main file containing a collection of functions used to make API queries. Below are function descriptions and examples of their use.
+## <ins>Requesting Data</ins>
 
-<br />
+</br>
 
 #### **precip_totals**(start_date, end_date, networks)
 This function returns the sum of rainfall totals across each sensor in a given network(s) for a provided date range.
@@ -66,20 +50,21 @@ Parameters:
 ````
 start_date (required): (string) - Range start date in "YYYY-MM-DD" format.
 end_date (required):   (string) - Range end date in "YYYY-MM-DD" format.
-network(s) (required): (string) - The network or networks to be queried. Multiple networks must be separated by a hyphen (-). ex. "pima_fcd-rainlog"
+network(s) (required): (string) - The network(s) to be queried. Multiple networks must be separated by a hyphen (-). ex. "pima_fcd-rainlog"
 ````
 
 Example: 
 ````python
 # single network query (return shown below)
-precip_totals("2021-08-01", "2021-08-02", "rainlog")
+monsoon_object.precip_totals("2021-08-01", "2021-08-02", "rainlog")
 
 # multiple network query
-precip_totals("2021-08-01", "2021-08-02", "pima_fcd-rainlog")
+monsoon_object.precip_totals("2021-08-01", "2021-08-02", "pima_fcd-rainlog")
 ````
 
 Return:
 ````json
+    ...
     {
         "total_rainfall": 0,
         "lon": -111.60009,
@@ -114,12 +99,12 @@ Parameters:
 network (required):    (string) - Sensor network to gather data from.
 start_date (required): (string) - Specific date or beginning date range to gather data from in "YYYY-MM-DD" format.
 end_date:              (string) - End date of a the date range being requested in "YYYY-MM-DD" format.
-sensor:                (string)    - Specific sensor to retrieve data for. If not provided, all sensor reading will be returned.
+sensor:                (string) - Specific sensor to retrieve data for. If not provided, all sensor reading will be returned.
 ````
 
 Example:
 ````python
-sensor_readings("pima_fcd", "2021-08-02", "2021-08-10", 1030)
+monsoon_object.sensor_readings("pima_fcd", "2021-08-02", "2021-08-10", 1030)
 ````
 Return:
 ````json
@@ -165,11 +150,12 @@ raw:                   (bool)   - Default is False. If True the data will run th
 Example:
 ````python
 # request for sensor name 1030 precip data from 2019 and 2020 monsoon seasons
-monsoon_data("pima_fcd", "2019", "2020", 1030, True) 
+monsoon_object("pima_fcd", "2019", "2020", 1030, True) 
 ````
 Return:
 ````json
- {
+    ...
+    {
         "sensor_name": "1030",
         "reading_value": 6.73,
         "lat": 32.532799,
@@ -207,12 +193,12 @@ Return:
 Example:
 ````python
 # request for sensor name 1030 precip data from 2019 and 2020 monsoon seasons
-monsoon_data("pima_fcd", "2019", "2020", 1030, False)
+monsoon_object.monsoon_data("pima_fcd", "2019", "2020", 1030, False)
 ````
 
 Return:
 ````json
-[
+    ...
     {
         "sensor_name": "1030",
         "total_rainfall": 6.93,
@@ -220,7 +206,7 @@ Return:
         "lat": 32.532799,
         "network": "pima_fcd"
     }
-]
+    ...
 ````
 
 
@@ -228,10 +214,11 @@ Return:
 Example:
 ````python
 # request for all sensor data from 2019 monsoon season
-monsoon_data("pima_fcd", "2019") 
+monsoon_object.monsoon_data("pima_fcd", "2019") 
 ````
 Return:
 ````json
+    ...
     {
         "sensor_name": "4310",
         "total_rainfall": 9.530000000000001,
@@ -278,20 +265,20 @@ This function retrieves specific sensor metadata for a single sensor name or an 
 Parameters:
 ````
 network (required): (string) - Network to retrieve sensor information from as string.
-sensor:             (string)    - Retrieve specific sensor metadata. If not provided all sensors within a network will be returned.
+sensor:             (string) - Retrieve specific sensor metadata. If not provided all sensors within a network will be returned.
 ````
 Example:
 ````python
 # single sensor request
-sensor_metadata("pima_fcd", 1030)
+monsoon_object.sensor_metadata("pima_fcd", 1030)
 
 # entire sensor network request
-sensor_metadata("pima_fcd")
+monsoon_object.sensor_metadata("pima_fcd")
 
 ````
 Return:
 ````json
-[
+    ...
     {
         "sensor_id": 3,
         "sensor_name": "1030",
@@ -300,12 +287,11 @@ Return:
         "location_name": "Oracle Ridge",
         "sensor_type": "Precipitation"
     }
-]
+    ...
 ````
+</br>
 
-
-
-#### **flood_data(network, start_date, end_date="",sensor="")** 
+#### **flood_data(network, start_date, end_date="", sensor="")** 
  Flood data route makes an API call for data between the start date and end date 
  and optionally a sensor.
 
@@ -314,29 +300,30 @@ Parameters:
 ```
 :param network (required):     (string) - sensor network only pima and maricopa 
 :param start_date (required):  (string) - format "YYYY-MM-DD"
-:param end_date (optional):    (string) - format "YYYY-MM-DD"
-:param sensor (optional):      (string) - specific sensor ID 
+:param end_date:               (string) - format "YYYY-MM-DD"
+:param sensor:                 (string) - specific sensor ID 
 ```
 
 Example:
 
-```
+```python
 # entire network request
-flood_data("pima_fcd","2022-02-15")
+monsoon_object.flood_data("pima_fcd","2022-02-15")
 # single sensor request
-flood_data("maricopa_fcd","2022-01-18", "2022-02-01", "773")
+monsoon_object.flood_data("maricopa_fcd","2022-01-18", "2022-02-01", "773")
 ```
 
 Return:
+```json
+    ...
+    {
+        "sensor_name": "6383",
+        "reading_date": "2022-02-15T22: 20: 56.000Z",
+        "feet": 2.4,
+        "cfs": 0,
+        "anomaly_checksum": "",
+        "lat": 31.839169,
+        "lon": -111.404335
+    }
+    ... 
 ```
- [
-      {
-        "sensor_name": '6383',
-        'reading_date': '2022-02-15T22: 20: 56.000Z',
-        'feet': 2.4,
-        'cfs': 0,
-        'anomaly_checksum': '',
-        'lat': 31.839169,
-        'lon': -111.404335
-    } 
-]
