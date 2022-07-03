@@ -102,7 +102,7 @@ class MonsoonAPI:
 
     # construct API request
         query_string = MonsoonAPI.API_BASE_URL + \
-            "/monsoon?network={}&startYear={}&endYear{}&sensor={}&raw={}".format(
+            "/monsoon?network={}&startYear={}&endYear={}&sensor={}&raw={}".format(
                 network, start_year, end_year, sensor, raw)
         # send request
         return self.__get_data(query_string)
