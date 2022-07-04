@@ -31,15 +31,15 @@ class MonsoonAPI:
         # validate date input
         self.__validate_date_input(start_date, end_date)
 
-        # after input validation, construct API request
-        query_string = MonsoonAPI.API_BASE_URL + \
-            "?startDate={}&endDate={}&network={}".format(
-                start_date, end_date, networks)
+        # construct API request
+        # base monsoon url returns precipitation totals
+        url_string = ""
+        payload = {'startDate':start_date, 'endDate':end_date, 'network':networks}
 
-        # send request
-        return self.__get_data(query_string)
-
-
+        # send request and return result
+        return self.__get_data(url_string, payload) 
+       
+       
     def sensor_readings(self, network, start_date, end_date="", sensor=""):
         """
         Retrieves raw unprocessed sensor reading data from a given network or network sensor for a
@@ -56,29 +56,32 @@ class MonsoonAPI:
         self.__validate_date_input(start_date, end_date)
 
         # construct API request
-        query_string = MonsoonAPI.API_BASE_URL + \
-            "/readings?network={}&startDate={}&endDate={}&sensor={}".format(
-                network, start_date, end_date, sensor)
+        url_string = "/readings"
+        payload = {'network':network, 'startDate':start_date, 'endDate':end_date, 'sensor':sensor}
+        
+        # send request and return result
+        return self.__get_data(url_string, payload)
 
-        # send request
-        return self.__get_data(query_string)
 
     def flood_data(self, network, start_date, end_date="", sensor=""):
         """
         Flood data route makes an API call for data between the start date and end date 
         and optionally a sensor.
-        :param network (required):     (string) - sensor network only pima and maricopa 
-        :param start_date (required):  (string) - format "YYYY-MM-DD"
-        :param end_date (optional):    (string) - format "YYYY-MM-DD"
-        :param sensor (optional):      (string) - specific sensor ID 
+        :param network    (required): (string) - sensor network only pima and maricopa 
+        :param start_date (required): (string) - format "YYYY-MM-DD"
+        :param end_date:              (string) - format "YYYY-MM-DD"
+        :param sensor:                (string) - specific sensor ID 
         """
+
+        # validate date input
         self.__validate_date_input(start_date, end_date)
 
-        query_string = MonsoonAPI.API_BASE_URL + \
-            "/flood?network={}&startDate={}&endDate={}&sensor={}".format(
-                network, start_date, end_date, sensor)
+        # construct API request
+        url_string = "/flood"
+        payload = {'network':network, 'startDate':start_date, 'endDate':end_date, 'sensor':sensor}
 
-        return self.__get_data(query_string)
+        # send request and return result
+        return self.__get_data(url_string, payload)
 
 
     def monsoon_data(self, network, start_year, end_year="", sensor="", raw=""): 
@@ -92,20 +95,20 @@ class MonsoonAPI:
         :param end_year:              (string) - End year (inclusive) of monsoon data date range in "YYYY" format.
         :param sensor:                (string) - Specific sensor id monsoon data is being requested.
         :param raw:                   (bool)   - Default is False. If True the data will run through our delta calculation to return
-                                                totals for all sensors during the monsoon period. When used raw 
-                                                adds datetime to return.
+                                                 totals for all sensors during the monsoon period. When used raw 
+                                                 adds datetime to return.
         :return JSON:                          - Returns monsoon data for given year(s).
         """
 
         # validate year input
         self.__validate_year_input(start_year, end_year)
 
-    # construct API request
-        query_string = MonsoonAPI.API_BASE_URL + \
-            "/monsoon?network={}&startYear={}&endYear={}&sensor={}&raw={}".format(
-                network, start_year, end_year, sensor, raw)
-        # send request
-        return self.__get_data(query_string)
+        # construct API request
+        url_string = "/monsoon"
+        payload = {'network':network, 'startYear':start_year, 'endYear':end_year, 'sensor':sensor, 'raw':raw}
+
+        # send request and return result
+        return self.__get_data(url_string, payload)
 
 
     def sensor_metadata(self, network, sensor=""):
@@ -118,17 +121,16 @@ class MonsoonAPI:
         """
 
         # construct API request
-        query_string = MonsoonAPI.API_BASE_URL + \
-            "/sensors?network={}&sensor={}".format(network, sensor)
+        url_string = "/sensors"
+        payload = {'network':network, 'sensor':sensor}
 
-        # send request
-        return self.__get_data(query_string)
+        # send request and return result
+        return self.__get_data(url_string, payload)
 
 
     """
     Helper functions
     """
-
 
     def __login(self):
         """
@@ -154,21 +156,20 @@ class MonsoonAPI:
         self.__headers = headers 
 
 
-    def __get_data(self, url):
+    def __get_data(self, url_string, payload):
         """
-        Common set of instructions used to perform requests for all API functions/routes.
+        Common set of instructions used to perform requests for all API methods/routes.
 
-        :param url (required): (string) - Composed URL string for specific data API routes.
-        :return JSON:                   - Requested data.
+        :param url_string (required): (string)     - String used for specific data API routes.
+        :param payload    (required): (dictionary) - Dictionary of parameters.
+        :return JSON:                              - Requested data.
         """
 
-
-        # make request
-        r = requests.get(url, headers=self.__headers)
-        data = json.loads(r.text)
-
+        # build and make request
+        r = requests.get(MonsoonAPI.API_BASE_URL+url_string, payload, headers=self.__headers)
+        
         # return formatted data
-        return data
+        return json.loads(r.text)
 
 
     def __validate_date_input(self, start_date, end_date=""):
