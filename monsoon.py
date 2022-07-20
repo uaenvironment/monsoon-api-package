@@ -138,17 +138,17 @@ class MonsoonAPI:
 
         :return: (string) - Session token.
         """
-        r = requests.post(MonsoonAPI.API_BASE_URL+"/login", {
+        req = requests.post(MonsoonAPI.API_BASE_URL+"/login", {
             "username": self.__username,
             "key": self.__api_key
         })
 
         # check for status code >= 400 indicating authentication error
-        if (r.status_code >= 400):
+        if (req.status_code >= 400):
             sys.exit("Could not authenticate")
 
         # else, load auth token
-        token = json.loads(r.text)
+        token = json.loads(req.text)
         headers = {
             "Authorization": "Bearer {}".format(token['accessToken'])
         }
@@ -166,10 +166,10 @@ class MonsoonAPI:
         """
 
         # build and make request
-        r = requests.get(MonsoonAPI.API_BASE_URL+url_string, payload, headers=self.__headers)
+        req = requests.get(MonsoonAPI.API_BASE_URL+url_string, payload, headers=self.__headers)
         
         # return formatted data
-        return json.loads(r.text)
+        return json.loads(req.text)
 
 
     def __validate_date_input(self, start_date, end_date=""):
