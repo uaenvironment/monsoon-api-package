@@ -192,7 +192,7 @@ class MonsoonAPI:
             err_message += "start_date format '" + start_date + "' not correct\n"
 
         # if end_date parameter is provided validate format and date order
-        if end_date:
+        if end_date is not None:
             try:
                 datetime.datetime.strptime(end_date, "%Y-%m-%d")
             except:
@@ -228,7 +228,7 @@ class MonsoonAPI:
             err_message += "start_year format '" + start_year + "' not correct\n"
 
         # if end_year parameter is provided validate format and year order
-        if end_year:
+        if end_year is not None:
             try:
                 datetime.datetime.strptime(end_year, "%Y")
             except:
