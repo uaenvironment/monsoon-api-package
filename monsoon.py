@@ -40,7 +40,7 @@ class MonsoonAPI:
         return self.__get_data(url_string, payload) 
        
        
-    def sensor_readings(self, network, start_date, end_date="", sensor=""):
+    def sensor_readings(self, network, start_date, end_date=None, sensor=None):
         """
         Retrieves raw unprocessed sensor reading data from a given network or network sensor for a
         specific date or date range.
@@ -63,7 +63,7 @@ class MonsoonAPI:
         return self.__get_data(url_string, payload)
 
 
-    def flood_data(self, network, start_date, end_date="", sensor=""):
+    def flood_data(self, network, start_date, end_date=None, sensor=None):
         """
         Flood data route makes an API call for data between the start date and end date 
         and optionally a sensor.
@@ -84,7 +84,7 @@ class MonsoonAPI:
         return self.__get_data(url_string, payload)
 
 
-    def monsoon_data(self, network, start_year, end_year="", sensor="", raw=""): 
+    def monsoon_data(self, network, start_year, end_year=None, sensor=None, raw=None): 
         """
         Monsoon data route which makes an API call for data between June 15th to
         September 30th for a given year or set of years (inclusive). Also allows the
@@ -111,7 +111,7 @@ class MonsoonAPI:
         return self.__get_data(url_string, payload)
 
 
-    def sensor_metadata(self, network, sensor=""):
+    def sensor_metadata(self, network, sensor=None):
         """
         Retrieves sensor metadata such as name, location, and sensor type for a specific sensor id or entire network.
 
@@ -172,7 +172,7 @@ class MonsoonAPI:
         return json.loads(req.text)
 
 
-    def __validate_date_input(self, start_date, end_date=""):
+    def __validate_date_input(self, start_date, end_date):
         """
         Date validation helper function to check for start_date and end_date
         order and proper date format of YYYY-MM-DD.
@@ -208,7 +208,7 @@ class MonsoonAPI:
             sys.exit(err_message)
 
 
-    def __validate_year_input(self, start_year, end_year=""):
+    def __validate_year_input(self, start_year, end_year):
         """
         Year validation helper function to check for start_year and end_year
         order and proper year format "YYYY".
