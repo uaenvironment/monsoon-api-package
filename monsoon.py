@@ -172,7 +172,7 @@ class MonsoonAPI:
         return json.loads(req.text)
 
 
-    def __validate_date_input(self, start_date, end_date):
+    def __validate_date_input(self, start_date, end_date=None):
         """
         Date validation helper function to check for start_date and end_date
         order and proper date format of YYYY-MM-DD.
@@ -208,7 +208,7 @@ class MonsoonAPI:
             sys.exit(err_message)
 
 
-    def __validate_year_input(self, start_year, end_year):
+    def __validate_year_input(self, start_year, end_year=None):
         """
         Year validation helper function to check for start_year and end_year
         order and proper year format "YYYY".
