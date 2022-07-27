@@ -1,13 +1,15 @@
 [build-system]
 requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
 
 
 [project]
-name = "clitest"
+name = "monsoon"
 version = "0.0.1"
 dependencies = ["click","requests", "monsoon","pandas"]
 
 [project.scripts]
-clipack = "clitest:cli"
+monsoon-cli = "monsoon.cli:cli"
 
-
+[tool.setuptools]
+packages = ["monsoon"]
