@@ -17,7 +17,18 @@ Data collection from additional networks is currently being tested and will be a
 <br />
 
 ## <ins>Getting Started</ins>
-This repository contains 1 file named monsoon.py which is a class containing a collection of methods used to query the API for data. 
+
+### Installing
+Clone this repository and install the required dependencies using the included
+`requirements.txt` file. This can be done using the command
+`pip install -r  requirements.txt`. Next, install the monsoon package by
+running `pip install .` from the root of the repository.
+
+We intend to make the package available via PyPI in the near future.
+
+### Command line usage
+Following installation, the `monsoon-cli` command will be available. Use the
+`moonsoon-cli --help` command for further instructions.
 
 <br>
 
