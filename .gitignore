@@ -1,2 +1,8 @@
+# ignore python build files
 test.py
 __pycache__/
+dist/
+*.egg-info/
+
+# ignore vim swap files
+*.swp
