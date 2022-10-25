@@ -18,6 +18,9 @@ Data collection from additional networks is currently being tested and will be a
 
 ## <ins>Getting Started</ins>
 
+### Requesting access
+Our data is accessible via an API key request which can be sent to <monsoon-api@list.arizona.edu>
+
 ### Installing
 Clone this repository and install the required dependencies using the included
 `requirements.txt` file. This can be done using the command
